@@ -4,7 +4,7 @@
   "description": "data structures and algorithms from the javascript book",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node lists.ts"
+    "start": "ts-node ./stacks_and_queues/priority_queues.ts"
   },
   "author": "",
   "license": "ISC",

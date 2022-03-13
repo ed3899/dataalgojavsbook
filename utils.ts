@@ -1,3 +1,3 @@
-export function print(_item: unknown) {
-  console.log(_item);
+export function print(..._items: unknown[]) {
+  console.log(..._items);
 }
