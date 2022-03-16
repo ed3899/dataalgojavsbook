@@ -14,6 +14,7 @@ class Graph {
   adj: (number | undefined)[][];
   marked: boolean[];
   edgeTo: number[];
+  vertexList: string[];
 
   constructor(_v: number) {
     this.vertices = _v;
@@ -21,6 +22,7 @@ class Graph {
     this.adj = [];
     this.marked = [];
     this.edgeTo = [];
+    this.vertexList = [];
     this._init();
   }
 
@@ -37,6 +39,18 @@ class Graph {
 
   private hasPathTo(_v: number) {
     return this.marked[_v];
+  }
+
+  private topSortHelper(_v: number, _visited: boolean[], _stack: number[]) {
+    _visited[_v] = true;
+
+    for (const edge of this.adj[_v]) {
+      if (edge !== undefined && !_visited[edge]) {
+        this.topSortHelper(edge, _visited, _stack);
+      }
+    }
+
+    _stack.push(_v);
   }
 
   addEdge(_v: number, _w: number) {
@@ -121,14 +135,50 @@ class Graph {
 
     return path;
   }
+
+  topSort() {
+    const stack: number[] = [];
+    const visited: boolean[] = [];
+
+    for (let i = 0; i < this.vertices; i++) {
+      visited[i] = false;
+    }
+
+    for (let i = 0; i < this.vertices; i++) {
+      if (visited[i] === false) {
+        this.topSortHelper(i, visited, stack);
+      }
+    }
+
+    for (let i = 0; i < stack.length; i++) {
+      if (stack[i] !== undefined && visited[i] !== false) {
+        console.log(this.vertexList[stack[i]]);
+      }
+    }
+  }
 }
 
-const g = new Graph(5);
-g.addEdge(0, 1);
-g.addEdge(0, 2);
-g.addEdge(1, 3);
-g.addEdge(2, 4);
-g.showGraph();
-g.bfs(0);
+const g = new Graph(6);
 
-console.log(g.pathTo(4));
+// g.addEdge(0, 1);
+// g.addEdge(1, 2);
+// g.addEdge(1, 3);
+// g.addEdge(3, 4);
+// g.addEdge(3, 5);
+
+g.addEdge(1, 2);
+g.addEdge(2, 5);
+g.addEdge(1, 3);
+g.addEdge(1, 4);
+g.addEdge(0, 1);
+
+g.vertexList = [
+  "CS1",
+  "CS2",
+  "Data Structures",
+  "Assembly Language",
+  "Operating Systems",
+  "Algorithms",
+];
+
+g.topSort();

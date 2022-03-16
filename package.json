@@ -4,7 +4,7 @@
   "description": "data structures and algorithms from the javascript book",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node graph.ts"
+    "start": "ts-node sorting.ts"
   },
   "author": "",
   "license": "ISC",
