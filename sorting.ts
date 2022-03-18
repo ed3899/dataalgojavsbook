@@ -2,11 +2,13 @@ class CArray {
   dataStore: number[];
   pos: number;
   numElements: number;
+  gaps: number[];
 
-  constructor(_numElements: number) {
+  constructor(_numElements: number, _gaps: number[] = [5, 3, 1]) {
     this.dataStore = [];
     this.pos = 0;
     this.numElements = _numElements;
+    this.gaps = _gaps;
     this._init();
   }
 
@@ -100,12 +102,38 @@ class CArray {
       this.dataStore[inner] = temp;
     }
   }
+
+  shellShort() {
+    //Which gap are we applying
+    for (let g = 0; g < this.gaps.length; g++) {
+      //Select the starting point based on the gap
+      for (let i = this.gaps[g]; i < this.dataStore.length; i++) {
+        //Initial value, it may cascade down
+        let temp = this.dataStore[i];
+        //Outside of the for scope
+        let j;
+
+        for (
+          //Initiate another pointer so we don't change i reference
+          j = i;
+          //As long as we have enough space for the gap and the left value  is greater
+          j >= this.gaps[g] && this.dataStore[j - this.gaps[g]] > temp;
+          j -= this.gaps[g]
+        ) {
+          //Copy to current j
+          this.dataStore[j] = this.dataStore[j - this.gaps[g]];
+        }
+        //Once we are out, assign the initial value to the right spot. Reassign if no changes
+        this.dataStore[j] = temp;
+      }
+    }
+  }
 }
 
 const myNums = new CArray(10);
 myNums.setData();
 console.log(myNums.toString());
 
-myNums.insertionSort();
+myNums.shellShort();
 
 console.log(myNums.toString());
