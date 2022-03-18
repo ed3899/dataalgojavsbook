@@ -1,3 +1,5 @@
+import {arrayBuffer} from "stream/consumers";
+
 class CArray {
   dataStore: number[];
   pos: number;
@@ -16,6 +18,56 @@ class CArray {
     for (let i = 0; i < this.numElements; i++) {
       this.dataStore[i] = i;
     }
+  }
+
+  private mergeArrays(
+    _arr: number[],
+    _startLeft: number,
+    _stopLeft: number,
+    _startRight: number,
+    _stopRight: number
+  ) {
+    //Create temp arrays taking into account 1 value, gap.
+    const rightArray = new Array(_stopRight - _startRight + 1);
+    const leftArray = new Array(_stopLeft - _startLeft + 1);
+
+    let k = _startRight;
+
+    //Populate right array
+    for (let i = 0; i < rightArray.length - 1; ++i) {
+      rightArray[i] = _arr[k];
+      k++;
+    }
+
+    k = _startLeft;
+
+    //Populate left array
+    for (let i = 0; i < leftArray.length - 1; ++i) {
+      leftArray[i] = _arr[k];
+      k++;
+    }
+
+    //Add sentinel values
+    rightArray[rightArray.length - 1] = Infinity;
+    leftArray[leftArray.length - 1] = Infinity;
+
+    let m = 0,
+      n = 0;
+
+    for (let k = _startLeft; k < _stopRight; k++) {
+      //Compare values between both arrays
+      if (leftArray[m] <= rightArray[n]) {
+        _arr[k] = leftArray[m];
+        m++;
+      } else {
+        _arr[k] = rightArray[n];
+        n++;
+      }
+    }
+
+    console.log(`Array is ${_arr}`);
+    console.log(`Left array - ${leftArray}`);
+    console.log(`Right array - ${rightArray}`);
   }
 
   setData() {
@@ -128,12 +180,50 @@ class CArray {
       }
     }
   }
+
+  mergeSort() {
+    if (this.dataStore.length < 2) {
+      return;
+    }
+
+    let step = 1;
+    let left, right;
+
+    while (step < this.dataStore.length) {
+      //Set initial pointer values
+      left = 0;
+      right = step;
+
+      while (right + step <= this.dataStore.length) {
+        this.mergeArrays(
+          this.dataStore,
+          left,
+          left + step,
+          right,
+          right + step
+        );
+        //Shift pointers
+        left = right + step;
+        right = left + step;
+      }
+
+      if (right < this.dataStore.length) {
+        this.mergeArrays(
+          this.dataStore,
+          left,
+          left + step,
+          right,
+          this.dataStore.length
+        );
+      }
+
+      step *= 2;
+    }
+  }
 }
 
-const myNums = new CArray(10);
-myNums.setData();
-console.log(myNums.toString());
-
-myNums.shellShort();
-
-console.log(myNums.toString());
+const nums = new CArray(10);
+nums.setData();
+console.log(nums.toString());
+nums.mergeSort();
+console.log(nums.toString());
