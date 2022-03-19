@@ -232,8 +232,8 @@ class CArray {
   quickSort(_arr: number[] = this.dataStore): number[] {
     if (_arr.length === 0) return [];
 
-    let left = [];
-    let right = [];
+    let left: number[] = [];
+    let right: number[] = [];
 
     let pivot = _arr[0];
 
@@ -279,12 +279,12 @@ class CArray {
     return false;
   }
 
-  binarySearch(_arr: number[] = this.dataStore, _data: number) {
+  static binarySearch(_arr: number[], _data: number) {
     let upperBound = _arr.length - 1,
       lowerBound = 0;
 
     while (lowerBound <= upperBound) {
-      let mid = Math.floor(upperBound / lowerBound / 2);
+      let mid = Math.floor((upperBound + lowerBound) / 2);
 
       //Pointers get close to each other with every iteration
       if (_arr[mid] < _data) {
@@ -298,8 +298,32 @@ class CArray {
 
     return -1;
   }
+
+  static count(_arr: number[], _data: number) {
+    let count = 0;
+
+    let position = CArray.binarySearch(_arr, _data);
+
+    if (position > -1) {
+      ++count;
+
+      for (let i = position - 1; i > 0; --i) {
+        if (_arr[i] === _data) {
+          ++count;
+        } else {
+          break;
+        }
+      }
+
+      for (let i = position + 1; i < _arr.length; ++i) {
+        if (_arr[i] === _data) {
+          ++count;
+        } else {
+          break;
+        }
+      }
+    }
+
+    return count;
+  }
 }
-
-const nums = new CArray(100).setData();
-
-console.log(nums.toString());
