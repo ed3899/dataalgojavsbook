@@ -82,6 +82,8 @@ class CArray {
     for (let i = 0; i < this.numElements; i++) {
       this.dataStore[i] = Math.floor(Math.random() * (this.numElements + 1));
     }
+
+    return this;
   }
 
   clear() {
@@ -108,11 +110,8 @@ class CArray {
     return retStr;
   }
 
-  swap(index1: number, index2: number) {
-    [this.dataStore[index1], this.dataStore[index2]] = [
-      this.dataStore[index2],
-      this.dataStore[index1],
-    ];
+  swap(index1: number, index2: number, _arr: number[] = this.dataStore) {
+    [_arr[index1], _arr[index2]] = [_arr[index2], _arr[index1]];
   }
 
   bubbleSort() {
@@ -252,10 +251,55 @@ class CArray {
 
     return this.quickSort(left).concat(pivot, this.quickSort(right));
   }
+
+  seqSearch(_data: number) {
+    for (let i = 0; i < this.dataStore.length; i++) {
+      if (this.dataStore[i] === _data) {
+        //Only if the value is not currently at the beginning
+        if (i > 0) {
+          this.swap(i, i - 1);
+        }
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  seqSearch2(_arr: number[] = this.dataStore, _data: number) {
+    for (let i = 0; i < _arr.length; i++) {
+      if (_arr[i] === _data && i > _arr.length * 0.2) {
+        this.swap(i, 0, _arr);
+        return true;
+      } else if (_arr[i] === _data) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  binarySearch(_arr: number[] = this.dataStore, _data: number) {
+    let upperBound = _arr.length - 1,
+      lowerBound = 0;
+
+    while (lowerBound <= upperBound) {
+      let mid = Math.floor(upperBound / lowerBound / 2);
+
+      //Pointers get close to each other with every iteration
+      if (_arr[mid] < _data) {
+        lowerBound = mid + 1;
+      } else if (_arr[mid] > _data) {
+        upperBound = mid - 1;
+      } else {
+        return mid;
+      }
+    }
+
+    return -1;
+  }
 }
 
-const ar = new CArray(10);
-ar.setData();
-console.log(ar.dataStore);
-ar.quickSort();
-console.log(ar.quickSort());
+const nums = new CArray(100).setData();
+
+console.log(nums.toString());
