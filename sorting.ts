@@ -20,6 +20,14 @@ class CArray {
     }
   }
 
+  /**
+   * Bottom up imp
+   * @param _arr
+   * @param _startLeft
+   * @param _stopLeft
+   * @param _startRight
+   * @param _stopRight
+   */
   private mergeArrays(
     _arr: number[],
     _startLeft: number,
@@ -207,6 +215,7 @@ class CArray {
         right = left + step;
       }
 
+      //Includes odd partition
       if (right < this.dataStore.length) {
         this.mergeArrays(
           this.dataStore,
@@ -220,10 +229,33 @@ class CArray {
       step *= 2;
     }
   }
+
+  quickSort(_arr: number[] = this.dataStore): number[] {
+    if (_arr.length === 0) return [];
+
+    let left = [];
+    let right = [];
+
+    let pivot = _arr[0];
+
+    for (let i = 1; i < _arr.length; i++) {
+      console.log(`pivot: ${pivot} current element: ${_arr[i]}`);
+
+      if (_arr[i] < pivot) {
+        console.log(`moving ${_arr[i]} to the left`);
+        left.push(_arr[i]);
+      } else {
+        console.log(`moving ${_arr[i]} to the right`);
+        right.push(_arr[i]);
+      }
+    }
+
+    return this.quickSort(left).concat(pivot, this.quickSort(right));
+  }
 }
 
-const nums = new CArray(10);
-nums.setData();
-console.log(nums.toString());
-nums.mergeSort();
-console.log(nums.toString());
+const ar = new CArray(10);
+ar.setData();
+console.log(ar.dataStore);
+ar.quickSort();
+console.log(ar.quickSort());
