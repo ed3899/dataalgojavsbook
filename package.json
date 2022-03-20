@@ -4,7 +4,7 @@
   "description": "data structures and algorithms from the javascript book",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node sorting.ts",
+    "start": "ts-node advanced.ts",
     "playground": "ts-node playground.ts"
   },
   "author": "",

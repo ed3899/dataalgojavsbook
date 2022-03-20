@@ -1,4 +1,4 @@
-import {arrayBuffer} from "stream/consumers";
+import {textFragment} from "./utils";
 
 class CArray {
   dataStore: number[];
@@ -327,3 +327,24 @@ class CArray {
     return count;
   }
 }
+
+const arrayOfText = textFragment.split(" ");
+
+console.log(arrayOfText);
+
+function insertionsort(arr: unknown[]) {
+  var temp, inner;
+  for (var outer = 1; outer <= arr.length - 1; ++outer) {
+    temp = arr[outer] as string;
+    inner = outer;
+    while (inner > 0 && (arr[inner - 1] as string) >= temp) {
+      arr[inner] = arr[inner - 1];
+      --inner;
+    }
+    arr[inner] = temp;
+  }
+}
+
+insertionsort(arrayOfText);
+
+console.log(arrayOfText);
