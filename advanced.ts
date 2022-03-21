@@ -151,7 +151,7 @@ function dKnapsack(
 }
 let value = [4, 5, 10, 11, 13];
 let size = [3, 4, 7, 8, 9];
-let capacity = 16;
+let capacity_ = 16;
 let n = 5;
 
 function makeChange(origAmt: number, coins: number[]) {
@@ -198,12 +198,37 @@ function showChange(coins: number[]) {
   }
 }
 
-const origAmt = 0.2;
+function ksack(values: any, weights: any, capacity: any) {
+  let load = 0;
+  let i = 0;
+  let w = 0;
+  while (load < capacity && i < 4) {
+    if (weights[i] <= capacity - load) {
+      w += values[i];
+      load += weights[i];
 
-const coins: any = [];
+      //Divide the item into smaller pieces
+    } else {
+      let r = (capacity - load) / weights[i];
 
-makeChange(origAmt, coins);
+      console.log(`r = ${r}`);
 
-showChange(coins);
+      w += r * values[i];
 
-console.log(.26 % .25)
+      console.log(`r * values[i] = ${r * values[i]}`);
+      load += r * weights[i];
+
+      console.log(`r * weights[i] = ${r * weights[i]}`);
+
+      console.log(`load = ${load}`);
+    }
+    ++i;
+  }
+  return w;
+}
+
+let values = [50, 140, 60, 60];
+let weights = [5, 20, 10, 12];
+let capacity = 30;
+
+console.log(ksack(values, weights, capacity));
